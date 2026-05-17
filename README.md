@@ -1,48 +1,88 @@
 # Dashboard AI
 
-Dashboard analytics com IA — conecte seu Supabase e visualize seus dados com insights do Llama 3.
+Dashboard analytics com IA — conecte seu banco Supabase e visualize seus dados com insights gerados pelo Llama 3 (Groq).
 
-## Setup
+## Tech Stack
 
-### 1. Instalar dependências
+- **React + Vite** — frontend
+- **JavaScript (JSX)** — componentes
+- **TypeScript** — Vercel Function e tipos
+- **Supabase** — banco de dados PostgreSQL
+- **Groq API / Llama 3** — geração de insights com IA (gratuito)
+- **Vercel Functions** — proxy seguro da API key
+- **Vercel** — deploy e hospedagem
+
+## Como usar
+
+1. Acesse o link do projeto
+2. Cole a URL e a Publishable Key do seu projeto Supabase
+3. Informe o nome da tabela
+4. Clique em **Conectar**
+5. Explore os gráficos e clique em **✨ Analisar com IA**
+
+Suas credenciais ficam salvas apenas no seu navegador (localStorage). Nenhum dado é enviado para servidores externos.
+
+## Rodando localmente
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/SEU_USUARIO/dashboard-ai.git
+cd dashboard-ai
+```
+
+### 2. Instale as dependências
+
 ```bash
 npm install
 ```
 
-### 2. Criar conta no Groq (grátis)
-- Acesse: https://console.groq.com
-- Crie uma conta gratuita
-- Gere uma API key
+### 3. Crie sua conta no Groq (gratuito)
 
-### 3. Variável de ambiente
-Crie um arquivo `.env` na raiz:
+Acesse [console.groq.com](https://console.groq.com), crie uma conta e gere uma API key.
+
+### 4. Configure o .env
+
+Crie um arquivo `.env` na raiz do projeto:
+
 ```
 GROQ_API_KEY=sua_chave_aqui
 ```
 
-### 4. Rodar local
+### 5. Rode com Vercel Dev
+
+> ⚠️ Use `npm run dev:vercel` e não `npm run dev`.
+> O Vite sozinho não serve a pasta `api/` — só o `vercel dev` executa as funções serverless localmente.
+
 ```bash
-npm run dev
+npm run dev:vercel
 ```
 
-### 5. Deploy no Vercel
-```bash
-npm install -g vercel
-vercel
+Acesse: **http://localhost:3000**
+
+## Deploy na Vercel
+
+1. Suba o projeto no GitHub
+2. Acesse [vercel.com](https://vercel.com) → **Add New Project** → importe o repositório
+3. Antes de fazer deploy, adicione a variável de ambiente:
+   - `GROQ_API_KEY` = sua chave do Groq
+4. Clique em **Deploy**
+
+A cada `git push` o deploy acontece automaticamente.
+
+## Estrutura do projeto
+
 ```
-No painel do Vercel, adicione a variável de ambiente `GROQ_API_KEY`.
+src/
+├── App.jsx
+├── dashboard.css
+└── components/
+    ├── ConnectionSetup.jsx   ← tela de conexão
+    ├── Dashboard.jsx         ← tela principal
+    ├── ChartSection.jsx      ← gráfico automático
+    ├── DataTable.jsx         ← tabela de dados
+    └── InsightCard.jsx       ← cards de insight da IA
 
-## Como usar
-
-1. Abra o site
-2. Coloque a URL e Anon Key do seu projeto Supabase
-3. Informe o nome da tabela
-4. Clique em Conectar
-5. Explore os gráficos e clique em "Analisar com IA"
-
-## Tech stack
-- React + TypeScript
-- Supabase (banco PostgreSQL)
-- Recharts (gráficos)
-- Groq API / Llama 3 (IA gratuita)
-- Vercel Functions (proxy seguro da API key)
+api/
+└── analyze.ts               ← Vercel Function → chama Groq
+```
